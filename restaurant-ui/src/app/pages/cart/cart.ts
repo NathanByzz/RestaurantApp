@@ -11,14 +11,18 @@ import { OrderCreate } from '../../models/order-create.model';
 
 @Component({
   selector: 'app-cart',
-  imports: [RouterLink, DecimalPipe, FormsModule],
+  imports: [
+    RouterLink,
+    DecimalPipe,
+    FormsModule
+  ],
   templateUrl: './cart.html',
   styleUrl: './cart.css'
 })
 export class Cart implements OnInit {
   items: CartItem[] = [];
 
-  deliveryAddress = '456 rue du Client';
+  deliveryAddress = '';
 
   errorMessage = '';
   successMessage = '';
@@ -68,10 +72,18 @@ export class Cart implements OnInit {
     }
 
     if (!this.deliveryAddress.trim()) {
-  this.errorMessage = 'L’adresse de livraison est obligatoire.';
-  this.cdr.detectChanges();
-  return;
-}
+      this.errorMessage = 'L’adresse de livraison est obligatoire.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    const addressRegex = /^\d+\s+[\p{L}0-9\s,'-]+$/u;
+
+    if (!addressRegex.test(this.deliveryAddress.trim())) {
+      this.errorMessage = 'L’adresse doit commencer par un numéro suivi du nom de la rue.';
+      this.cdr.detectChanges();
+      return;
+    }
 
     const user = this.authService.getUser();
 
@@ -86,7 +98,7 @@ export class Cart implements OnInit {
     const order: OrderCreate = {
       clientId: user.id,
       restaurantId: restaurantId,
-      deliveryAddress: this.deliveryAddress,
+      deliveryAddress: this.deliveryAddress.trim(),
       items: this.items.map(item => ({
         dishId: item.dish.id,
         quantity: item.quantity
@@ -99,13 +111,15 @@ export class Cart implements OnInit {
       this.cartService.clearCart();
       this.refreshCart();
 
+      this.deliveryAddress = '';
+
       this.successMessage =
         `Commande #${createdOrder.id} créée avec succès. Total : ${createdOrder.totalAmount.toFixed(2)} $.`;
 
       this.cdr.detectChanges();
     } catch (error) {
       this.errorMessage =
-        'Impossible de créer la commande. Vérifiez que vous êtes connecté comme Client.';
+        'Impossible de créer la commande. Vérifiez l’adresse et votre connexion client.';
 
       this.cdr.detectChanges();
     }

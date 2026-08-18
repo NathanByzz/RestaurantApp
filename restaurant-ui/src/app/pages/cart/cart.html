@@ -13,7 +13,10 @@
     <div class="empty-cart">
       <h3>Votre panier est vide.</h3>
       <p>Ajoutez des plats depuis la liste des restaurants pour passer une commande.</p>
-      <a routerLink="/restaurants" class="button-link">Voir les restaurants</a>
+
+      <a routerLink="/restaurants" class="button-link">
+        Voir les restaurants
+      </a>
     </div>
   }
 
@@ -24,23 +27,35 @@
           <article class="cart-item">
             <div class="item-info">
               <h3>{{ item.dish.name }}</h3>
+
               <p>{{ item.dish.description }}</p>
+
               <p class="unit-price">
                 Prix unitaire : {{ item.dish.price | number:'1.2-2' }} $
               </p>
             </div>
 
             <div class="quantity-controls">
-              <button type="button" (click)="decreaseQuantity(item.dish.id)">-</button>
+              <button type="button" (click)="decreaseQuantity(item.dish.id)">
+                -
+              </button>
+
               <span>{{ item.quantity }}</span>
-              <button type="button" (click)="increaseQuantity(item.dish.id)">+</button>
+
+              <button type="button" (click)="increaseQuantity(item.dish.id)">
+                +
+              </button>
             </div>
 
             <p class="subtotal">
               {{ item.dish.price * item.quantity | number:'1.2-2' }} $
             </p>
 
-            <button type="button" class="danger" (click)="removeFromCart(item.dish.id)">
+            <button
+              type="button"
+              class="danger"
+              (click)="removeFromCart(item.dish.id)"
+            >
               Retirer
             </button>
           </article>
@@ -62,15 +77,25 @@
             [(ngModel)]="deliveryAddress"
             name="deliveryAddress"
             required
+            placeholder="Ex: 456 rue du Client"
+            pattern="^[0-9]+\s+[\p{L}0-9\s,'-]+$"
           >
         </label>
+
+        <p class="address-hint">
+          L’adresse doit commencer par un numéro suivi du nom de la rue.
+        </p>
 
         <div class="total-line">
           <span>Total</span>
           <strong>{{ getTotal() | number:'1.2-2' }} $</strong>
         </div>
 
-        <button type="button" class="checkout-button" (click)="checkout()">
+        <button
+          type="button"
+          class="checkout-button"
+          (click)="checkout()"
+        >
           Commander
         </button>
       </div>

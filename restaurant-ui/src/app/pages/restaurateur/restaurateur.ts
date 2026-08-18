@@ -80,11 +80,38 @@ export class Restaurateur implements OnInit {
       return;
     }
 
+    if (
+      !this.name.trim() ||
+      !this.description.trim() ||
+      !this.address.trim() ||
+      !this.phoneNumber.trim()
+    ) {
+      this.errorMessage = 'Tous les champs du restaurant sont obligatoires.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    const phoneRegex = /^[0-9]{10}$/;
+
+    if (!phoneRegex.test(this.phoneNumber.trim())) {
+      this.errorMessage = 'Le numéro de téléphone doit contenir exactement 10 chiffres.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    const addressRegex = /^\d+\s+[\p{L}0-9\s,'-]+$/u;
+
+    if (!addressRegex.test(this.address.trim())) {
+      this.errorMessage = 'L’adresse doit commencer par un numéro suivi du nom de la rue.';
+      this.cdr.detectChanges();
+      return;
+    }
+
     const restaurant: RestaurantCreate = {
-      name: this.name,
-      description: this.description,
-      address: this.address,
-      phoneNumber: this.phoneNumber,
+      name: this.name.trim(),
+      description: this.description.trim(),
+      address: this.address.trim(),
+      phoneNumber: this.phoneNumber.trim(),
       ownerId: user.id
     };
 

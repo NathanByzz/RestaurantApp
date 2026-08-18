@@ -15,25 +15,52 @@
     <form class="restaurant-form" (ngSubmit)="createRestaurant()">
       <label>
         Nom du restaurant
-        <input type="text" name="name" [(ngModel)]="name">
+        <input
+          type="text"
+          name="name"
+          [(ngModel)]="name"
+          required
+        >
       </label>
 
       <label>
         Description
-        <input type="text" name="description" [(ngModel)]="description">
+        <input
+          type="text"
+          name="description"
+          [(ngModel)]="description"
+          required
+        >
       </label>
 
       <label>
         Adresse
-        <input type="text" name="address" [(ngModel)]="address">
+        <input
+          type="text"
+          name="address"
+          [(ngModel)]="address"
+          required
+          placeholder="Ex: 123 rue Test"
+        >
       </label>
 
       <label>
         Téléphone
-        <input type="text" name="phoneNumber" [(ngModel)]="phoneNumber">
+        <input
+          type="text"
+          name="phoneNumber"
+          [(ngModel)]="phoneNumber"
+          required
+          maxlength="10"
+          pattern="[0-9]{10}"
+          inputmode="numeric"
+          placeholder="Ex: 5141234567"
+        >
       </label>
 
-      <button type="submit">Créer le restaurant</button>
+      <button type="submit">
+        Créer le restaurant
+      </button>
     </form>
   </section>
 
@@ -48,19 +75,30 @@
       <p>Vous n’avez pas encore créé de restaurant.</p>
     }
 
-    <div class="restaurant-grid">
-      @for (restaurant of restaurants; track restaurant.id) {
-        <article class="restaurant-card">
-          <h3>{{ restaurant.name }}</h3>
-          <p>{{ restaurant.description }}</p>
-          <p><strong>Adresse :</strong> {{ restaurant.address }}</p>
-          <p><strong>Téléphone :</strong> {{ restaurant.phoneNumber }}</p>
+    @if (!isLoading && restaurants.length > 0) {
+      <div class="restaurant-grid">
+        @for (restaurant of restaurants; track restaurant.id) {
+          <article class="restaurant-card">
+            <h3>{{ restaurant.name }}</h3>
 
-          <a [routerLink]="['/restaurateur/restaurants', restaurant.id, 'menu']">
-            Gérer le menu
-          </a>
-        </article>
-      }
-    </div>
+            <p>{{ restaurant.description }}</p>
+
+            <p>
+              <strong>Adresse :</strong>
+              {{ restaurant.address }}
+            </p>
+
+            <p>
+              <strong>Téléphone :</strong>
+              {{ restaurant.phoneNumber }}
+            </p>
+
+            <a [routerLink]="['/restaurateur/restaurants', restaurant.id, 'menu']">
+              Gérer le menu
+            </a>
+          </article>
+        }
+      </div>
+    }
   </section>
 </section>
