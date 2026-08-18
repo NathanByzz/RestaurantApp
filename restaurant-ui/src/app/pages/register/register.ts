@@ -45,79 +45,89 @@ export class Register implements OnInit {
     const roleFromUrl = this.route.snapshot.queryParamMap.get('role');
 
     if (
-    roleFromUrl === 'Client' ||
-    roleFromUrl === 'Restaurateur' ||
-    roleFromUrl === 'Livreur'
-  ) {
-    this.role = roleFromUrl;
-  }
-}
-
-async register(): Promise<void> {
-  this.errorMessage = '';
-  this.successMessage = '';
-
-  if (
-    !this.firstName.trim() ||
-    !this.lastName.trim() ||
-    !this.email.trim() ||
-    !this.phoneNumber.trim() ||
-    !this.password.trim() ||
-    !this.role.trim()
-  ) {
-    this.errorMessage = 'Tous les champs sont obligatoires.';
-    this.cdr.detectChanges();
-    return;
+      roleFromUrl === 'Client' ||
+      roleFromUrl === 'Restaurateur' ||
+      roleFromUrl === 'Livreur'
+    ) {
+      this.role = roleFromUrl;
+    }
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  async register(): Promise<void> {
+    this.errorMessage = '';
+    this.successMessage = '';
 
-  if (!emailRegex.test(this.email)) {
-    this.errorMessage = 'Veuillez entrer une adresse email valide.';
-    this.cdr.detectChanges();
-    return;
-  }
-
-  const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
-
-  if (!passwordRegex.test(this.password)) {
-    this.errorMessage =
-      'Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial.';
-    this.cdr.detectChanges();
-    return;
-  }
-
-  const payload = {
-    firstName: this.firstName,
-    lastName: this.lastName,
-    email: this.email,
-    phoneNumber: this.phoneNumber,
-    password: this.password,
-    role: this.role
-  };
-
-  try {
-    const response = await fetch(this.apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });
-
-    if (!response.ok) {
-      throw new Error('Inscription échouée.');
+    if (
+      !this.firstName.trim() ||
+      !this.lastName.trim() ||
+      !this.email.trim() ||
+      !this.phoneNumber.trim() ||
+      !this.password.trim() ||
+      !this.role.trim()
+    ) {
+      this.errorMessage = 'Tous les champs sont obligatoires.';
+      this.cdr.detectChanges();
+      return;
     }
 
-    this.successMessage = `Compte ${this.role} créé avec succès. Vous pouvez maintenant vous connecter.`;
-    this.cdr.detectChanges();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    setTimeout(() => {
-      this.router.navigate(['/login']);
-    }, 1000);
-  } catch (error) {
-    this.errorMessage = 'Impossible de créer le compte. Vérifiez les informations.';
-    this.cdr.detectChanges();
+    if (!emailRegex.test(this.email)) {
+      this.errorMessage = 'Veuillez entrer une adresse email valide.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    const phoneRegex = /^[0-9]{10}$/;
+
+    if (!phoneRegex.test(this.phoneNumber)) {
+      this.errorMessage = 'Le numéro de téléphone doit contenir exactement 10 chiffres.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+
+    if (!passwordRegex.test(this.password)) {
+      this.errorMessage =
+        'Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    const payload = {
+      firstName: this.firstName.trim(),
+      lastName: this.lastName.trim(),
+      email: this.email.trim(),
+      phoneNumber: this.phoneNumber.trim(),
+      password: this.password,
+      role: this.role
+    };
+
+    try {
+      const response = await fetch(this.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error('Inscription échouée.');
+      }
+
+      this.successMessage =
+        `Compte ${this.role} créé avec succès. Vous pouvez maintenant vous connecter.`;
+
+      this.cdr.detectChanges();
+
+      setTimeout(() => {
+        this.router.navigate(['/login']);
+      }, 1000);
+    } catch (error) {
+      this.errorMessage = 'Impossible de créer le compte. Vérifiez les informations.';
+      this.cdr.detectChanges();
+    }
   }
-}
 }

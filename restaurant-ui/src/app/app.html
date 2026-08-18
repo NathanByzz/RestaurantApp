@@ -1,32 +1,64 @@
 <div class="app-container">
   <header class="app-header">
-    <h1>RestaurantApp</h1>
+    <h1>
+      <mat-icon>restaurant</mat-icon>
+      RestaurantApp
+    </h1>
 
     <nav>
       @if (authService.isLoggedIn() && authService.getUser()?.role === 'Client') {
-        <a routerLink="/restaurants">Restaurants</a>
-        <a routerLink="/cart">Panier</a>
-        <a routerLink="/mes-commandes">Mes commandes</a>
+        <a routerLink="/restaurants">
+          <mat-icon>storefront</mat-icon>
+          Restaurants
+        </a>
+
+        <a routerLink="/cart">
+          <mat-icon>shopping_cart</mat-icon>
+          Panier
+        </a>
+
+        <a routerLink="/mes-commandes">
+          <mat-icon>receipt_long</mat-icon>
+          Mes commandes
+        </a>
       }
 
       @if (authService.isLoggedIn() && authService.getUser()?.role === 'Restaurateur') {
-        <a routerLink="/restaurateur">Espace restaurateur</a>
-        <a routerLink="/restaurateur/commandes">Commandes reçues</a>
+        <a routerLink="/restaurateur">
+          <mat-icon>dashboard</mat-icon>
+          Espace restaurateur
+        </a>
 
+        <a routerLink="/restaurateur/commandes">
+          <mat-icon>assignment</mat-icon>
+          Commandes reçues
+        </a>
       }
 
       @if (authService.isLoggedIn() && authService.getUser()?.role === 'Livreur') {
-  <a routerLink="/livreur">Espace livreur</a>
-}
-
-      @if (authService.isLoggedIn()) {
-        <button type="button" class="logout-button" (click)="logout()">
-          Déconnexion
-        </button>
+        <a routerLink="/livreur">
+          <mat-icon>delivery_dining</mat-icon>
+          Espace livreur
+        </a>
       }
 
+      @if (authService.isLoggedIn()) {
+  <a routerLink="/profil">
+    <mat-icon>account_circle</mat-icon>
+    Mon profil
+  </a>
+
+  <button type="button" class="logout-button" (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    Déconnexion
+  </button>
+}
+
       @if (!authService.isLoggedIn()) {
-        <a routerLink="/login">Connexion</a>
+        <a routerLink="/login">
+          <mat-icon>login</mat-icon>
+          Connexion
+        </a>
       }
     </nav>
   </header>

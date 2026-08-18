@@ -9,17 +9,25 @@ import { Orders } from './pages/orders/orders';
 import { Restaurateur } from './pages/restaurateur/restaurateur';
 import { RestaurateurMenu } from './pages/restaurateur-menu/restaurateur-menu';
 import { RestaurateurOrders } from './pages/restaurateur-orders/restaurateur-orders';
+import { Livreur } from './pages/livreur/livreur';
+import { Profile } from './pages/profile/profile';
 
 import { clientGuard } from './services/client.guard';
 import { restaurateurGuard } from './services/restaurateur.guard';
-import { Livreur } from './pages/livreur/livreur';
 import { livreurGuard } from './services/livreur.guard';
+import { authGuard } from './services/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
   { path: 'login', component: Login },
   { path: 'register', component: Register },
+
+  {
+    path: 'profil',
+    component: Profile,
+    canActivate: [authGuard]
+  },
 
   {
     path: 'restaurants',
@@ -64,10 +72,10 @@ export const routes: Routes = [
   },
 
   {
-  path: 'livreur',
-  component: Livreur,
-  canActivate: [livreurGuard]
-},
+    path: 'livreur',
+    component: Livreur,
+    canActivate: [livreurGuard]
+  },
 
   { path: '**', redirectTo: 'login' }
 ];

@@ -73,10 +73,16 @@ public class RestaurantsController : ControllerBase
 
         return Ok(restaurant);
     }
+
     [Authorize(Roles = "Restaurateur")]
     [HttpPost]
     public async Task<ActionResult<Restaurant>> CreateRestaurant(RestaurantCreateDto restaurantDto)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         var owner = await _context.Users.FindAsync(restaurantDto.OwnerId);
 
         if (owner == null)
@@ -91,10 +97,10 @@ public class RestaurantsController : ControllerBase
 
         var restaurant = new Restaurant
         {
-            Name = restaurantDto.Name,
-            Description = restaurantDto.Description,
-            Address = restaurantDto.Address,
-            PhoneNumber = restaurantDto.PhoneNumber,
+            Name = restaurantDto.Name.Trim(),
+            Description = restaurantDto.Description.Trim(),
+            Address = restaurantDto.Address.Trim(),
+            PhoneNumber = restaurantDto.PhoneNumber.Trim(),
             OwnerId = restaurantDto.OwnerId,
             IsActive = true
         };
@@ -117,33 +123,42 @@ public class RestaurantsController : ControllerBase
             }
         );
     }
+
     [Authorize(Roles = "Restaurateur")]
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> UpdateRestaurant(int id, Restaurant restaurant)
+    public async Task<IActionResult> UpdateRestaurant(int id, RestaurantUpdateDto restaurantDto)
     {
-        if (id != restaurant.Id)
+        if (!ModelState.IsValid)
         {
-            return BadRequest();
+            return BadRequest(ModelState);
         }
 
         var existingRestaurant = await _context.Restaurants.FindAsync(id);
 
         if (existingRestaurant == null)
         {
-            return NotFound();
+            return NotFound(new { message = "Restaurant introuvable." });
         }
 
-        existingRestaurant.Name = restaurant.Name;
-        existingRestaurant.Description = restaurant.Description;
-        existingRestaurant.Address = restaurant.Address;
-        existingRestaurant.PhoneNumber = restaurant.PhoneNumber;
-        existingRestaurant.IsActive = restaurant.IsActive;
-        existingRestaurant.OwnerId = restaurant.OwnerId;
+        existingRestaurant.Name = restaurantDto.Name.Trim();
+        existingRestaurant.Description = restaurantDto.Description.Trim();
+        existingRestaurant.Address = restaurantDto.Address.Trim();
+        existingRestaurant.PhoneNumber = restaurantDto.PhoneNumber.Trim();
 
         await _context.SaveChangesAsync();
 
-        return NoContent();
+        return Ok(new
+        {
+            existingRestaurant.Id,
+            existingRestaurant.Name,
+            existingRestaurant.Description,
+            existingRestaurant.Address,
+            existingRestaurant.PhoneNumber,
+            existingRestaurant.IsActive,
+            existingRestaurant.OwnerId
+        });
     }
+
     [Authorize(Roles = "Restaurateur")]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteRestaurant(int id)
@@ -152,7 +167,7 @@ public class RestaurantsController : ControllerBase
 
         if (restaurant == null)
         {
-            return NotFound();
+            return NotFound(new { message = "Restaurant introuvable." });
         }
 
         restaurant.IsActive = false;

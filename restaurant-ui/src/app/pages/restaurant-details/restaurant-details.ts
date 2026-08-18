@@ -3,10 +3,11 @@ import { DecimalPipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Dish } from '../../models/dish.model';
 import { CartService } from '../../services/cart.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-restaurant-details',
-  imports: [RouterLink, DecimalPipe],
+  imports: [RouterLink, DecimalPipe, MatIconModule],
   templateUrl: './restaurant-details.html',
   styleUrl: './restaurant-details.css'
 })

@@ -12,9 +12,13 @@ export interface Order {
   status: string;
   totalAmount: number;
   deliveryAddress: string;
+
   clientId: number;
   clientName?: string;
+  clientPhoneNumber?: string;
+
   restaurantId: number;
   restaurantName?: string;
+
   items: OrderItem[];
 }

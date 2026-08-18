@@ -16,6 +16,15 @@
   margin: 0;
   font-size: 30px;
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-header h1 mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
 }
 
 .app-header nav {
@@ -28,10 +37,19 @@
   color: white;
   text-decoration: none;
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .app-header nav a:hover {
   color: #dbeafe;
+}
+
+.app-header nav mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
 }
 
 main {
@@ -39,16 +57,19 @@ main {
 }
 
 .logout-button {
-  background: transparent;
-  color: white;
-  border: 1px solid white;
-  padding: 8px 12px;
-  border-radius: 4px;
+  background: transparent !important;
+  color: white !important;
+  border: 1px solid white !important;
+  padding: 8px 12px !important;
+  border-radius: 8px !important;
   cursor: pointer;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .logout-button:hover {
-  background: white;
-  color: #1e40af;
+  background: white !important;
+  color: var(--color-primary-hover) !important;
 }

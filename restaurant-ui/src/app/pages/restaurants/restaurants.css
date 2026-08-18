@@ -5,31 +5,57 @@
 
 .restaurant-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 22px;
 }
 
 .restaurant-card {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  min-height: 190px;
 }
 
-.restaurant-card h3 {
-  margin-top: 0;
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-title mat-icon {
+  color: var(--color-primary);
+}
+
+.description {
+  color: var(--color-muted);
+  margin: 18px 0;
+}
+
+.info-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.info-line mat-icon {
+  color: var(--color-primary);
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
 }
 
 .restaurant-card a {
-  display: inline-block;
-  margin-top: 12px;
-  color: white;
-  background: #222;
-  padding: 10px 14px;
-  border-radius: 4px;
-  text-decoration: none;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.restaurant-card a mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
 }
 
 .error {
-  color: darkred;
+  color: var(--color-error);
+  font-weight: bold;
 }

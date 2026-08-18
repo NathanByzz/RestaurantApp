@@ -5,6 +5,8 @@ using RestaurantApi.DTOs;
 using RestaurantApi.Models;
 using RestaurantApi.Services;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace RestaurantApi.Controllers;
 
@@ -24,6 +26,11 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterDto registerDto)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         if (
             string.IsNullOrWhiteSpace(registerDto.FirstName) ||
             string.IsNullOrWhiteSpace(registerDto.LastName) ||
@@ -46,6 +53,16 @@ public class AuthController : ControllerBase
             return BadRequest(new
             {
                 message = "Adresse email invalide."
+            });
+        }
+
+        var phoneRegex = @"^\d{10}$";
+
+        if (!Regex.IsMatch(registerDto.PhoneNumber, phoneRegex))
+        {
+            return BadRequest(new
+            {
+                message = "Le numéro de téléphone doit contenir exactement 10 chiffres."
             });
         }
 
@@ -80,19 +97,12 @@ public class AuthController : ControllerBase
             });
         }
 
-        // Ici tu gardes le reste de ton code :
-        // var user = new User { ... }
-        // hash password
-        // _context.Users.Add(user)
-        // await _context.SaveChangesAsync()
-        // return Ok(...)
-
         var user = new User
         {
-            FirstName = registerDto.FirstName,
-            LastName = registerDto.LastName,
-            Email = registerDto.Email,
-            PhoneNumber = registerDto.PhoneNumber,
+            FirstName = registerDto.FirstName.Trim(),
+            LastName = registerDto.LastName.Trim(),
+            Email = registerDto.Email.Trim(),
+            PhoneNumber = registerDto.PhoneNumber.Trim(),
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password),
             Role = registerDto.Role
         };
@@ -139,6 +149,63 @@ public class AuthController : ControllerBase
         {
             message = "Connexion réussie.",
             token,
+            user = new
+            {
+                user.Id,
+                user.FirstName,
+                user.LastName,
+                user.Email,
+                user.PhoneNumber,
+                user.Role
+            }
+        });
+    }
+
+    [Authorize]
+    [HttpPut("update-phone")]
+    public async Task<IActionResult> UpdatePhoneNumber(UpdatePhoneNumberDto dto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrWhiteSpace(userIdClaim))
+        {
+            return Unauthorized(new { message = "Utilisateur non authentifié." });
+        }
+
+        if (!int.TryParse(userIdClaim, out var userId))
+        {
+            return Unauthorized(new { message = "Identifiant utilisateur invalide." });
+        }
+
+        var user = await _context.Users.FindAsync(userId);
+
+        if (user == null)
+        {
+            return NotFound(new { message = "Utilisateur introuvable." });
+        }
+
+        var phoneRegex = @"^\d{10}$";
+
+        if (!Regex.IsMatch(dto.PhoneNumber, phoneRegex))
+        {
+            return BadRequest(new
+            {
+                message = "Le numéro de téléphone doit contenir exactement 10 chiffres."
+            });
+        }
+
+        user.PhoneNumber = dto.PhoneNumber.Trim();
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new
+        {
+            message = "Numéro de téléphone modifié avec succès.",
             user = new
             {
                 user.Id,

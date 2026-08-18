@@ -27,6 +27,35 @@ export class AuthService {
     return data;
   }
 
+  async updatePhoneNumber(phoneNumber: string): Promise<any> {
+    const token = this.getToken();
+
+    if (!token) {
+      throw new Error('Utilisateur non connecté.');
+    }
+
+    const response = await fetch(`${this.apiUrl}/update-phone`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ phoneNumber })
+    });
+
+    if (!response.ok) {
+      throw new Error('Modification du numéro échouée.');
+    }
+
+    const data = await response.json();
+
+    if (data.user) {
+      localStorage.setItem('user', JSON.stringify(data.user));
+    }
+
+    return data;
+  }
+
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('user');

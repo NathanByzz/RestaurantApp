@@ -1,0 +1,78 @@
+
+<section class="page profile-page">
+  <a [routerLink]="getBackLink()" class="back-link">
+    <mat-icon>arrow_back</mat-icon>
+    Retour
+  </a>
+
+  <section class="profile-card">
+    <h2 class="page-title">
+      <mat-icon>account_circle</mat-icon>
+      Mon profil
+    </h2>
+
+    @if (errorMessage) {
+      <p class="error">{{ errorMessage }}</p>
+    }
+
+    @if (successMessage) {
+      <p class="success">{{ successMessage }}</p>
+    }
+
+    @if (user) {
+      <div class="user-info">
+        <p>
+          <mat-icon>person</mat-icon>
+          <span>
+            <strong>Nom :</strong>
+            {{ user.firstName }} {{ user.lastName }}
+          </span>
+        </p>
+
+        <p>
+          <mat-icon>email</mat-icon>
+          <span>
+            <strong>Email :</strong>
+            {{ user.email }}
+          </span>
+        </p>
+
+        <p>
+          <mat-icon>badge</mat-icon>
+          <span>
+            <strong>Rôle :</strong>
+            {{ user.role }}
+          </span>
+        </p>
+
+        <p>
+          <mat-icon>phone</mat-icon>
+          <span>
+            <strong>Téléphone actuel :</strong>
+            {{ user.phoneNumber || 'Non défini' }}
+          </span>
+        </p>
+      </div>
+
+      <form class="profile-form" (ngSubmit)="updatePhoneNumber()">
+        <label>
+          Nouveau numéro de téléphone
+          <input
+            type="text"
+            name="phoneNumber"
+            [(ngModel)]="phoneNumber"
+            required
+            maxlength="10"
+            pattern="[0-9]{10}"
+            inputmode="numeric"
+          >
+        </label>
+
+        <button type="submit">
+          <mat-icon>save</mat-icon>
+          Enregistrer
+        </button>
+      </form>
+    }
+  </section>
+</section>

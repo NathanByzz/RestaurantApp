@@ -2,10 +2,11 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Restaurant } from '../../models/restaurant.model';
 import { RestaurantService } from '../../services/restaurant.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-restaurants',
-  imports: [RouterLink],
+  imports: [RouterLink, MatIconModule],
   templateUrl: './restaurants.html',
   styleUrl: './restaurants.css'
 })

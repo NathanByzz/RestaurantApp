@@ -9,10 +9,11 @@ import { OrderService } from '../../services/order.service';
 import { RestaurantService } from '../../services/restaurant.service';
 import { AuthService } from '../../services/auth.service';
 import { DishService } from '../../services/dish.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-restaurateur-orders',
-  imports: [RouterLink, DecimalPipe, DatePipe, FormsModule],
+  imports: [RouterLink, DecimalPipe, DatePipe,MatIconModule, FormsModule],
   templateUrl: './restaurateur-orders.html',
   styleUrl: './restaurateur-orders.css'
 })

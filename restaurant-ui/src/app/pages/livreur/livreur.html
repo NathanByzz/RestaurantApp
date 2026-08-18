@@ -1,5 +1,8 @@
-<section class="page">
-  <h2>Espace livreur</h2>
+<section class="page livreur-page">
+  <h2 class="page-title">
+    <mat-icon>delivery_dining</mat-icon>
+    Espace livreur
+  </h2>
 
   @if (errorMessage) {
     <p class="error">{{ errorMessage }}</p>
@@ -14,52 +17,100 @@
   }
 
   @if (!isLoading && orders.length === 0) {
-    <p>Aucune commande à livrer pour le moment.</p>
+    <div class="empty-orders">
+      <h3>Aucune commande à livrer</h3>
+      <p>Aucune commande n’est actuellement prête pour la livraison.</p>
+    </div>
   }
 
-  @if (orders.length > 0) {
+  @if (!isLoading && orders.length > 0) {
     <div class="orders-list">
       @for (order of orders; track order.id) {
         <article class="order-card">
           <div class="order-header">
             <div>
-              <h3>Commande #{{ order.id }}</h3>
+              <h3>
+                <mat-icon>receipt_long</mat-icon>
+                Commande #{{ order.id }}
+              </h3>
 
-              <p>
-                <strong>Restaurant :</strong>
-                {{ order.restaurantName || 'Restaurant #' + order.restaurantId }}
+              <p class="order-date">
+                <mat-icon>event</mat-icon>
+                Date : {{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}
               </p>
             </div>
 
-            <span class="status">{{ order.status }}</span>
+            <span class="status status-{{ order.status }}">
+              {{ order.status }}
+            </span>
           </div>
 
-          <p>
-            <strong>Date :</strong>
-            {{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}
-          </p>
+          <div class="order-info">
+            <p>
+              <mat-icon>storefront</mat-icon>
+              <span>
+                <strong>Restaurant :</strong>
+                {{ order.restaurantName || 'Restaurant non défini' }}
+              </span>
+            </p>
 
-          <p>
-            <strong>Adresse de livraison :</strong>
-            {{ order.deliveryAddress }}
-          </p>
+            <p>
+              <mat-icon>person</mat-icon>
+              <span>
+                <strong>Client :</strong>
+                {{ order.clientName || 'Client non défini' }}
+              </span>
+            </p>
 
-          <p>
-            <strong>Total :</strong>
-            {{ order.totalAmount | number:'1.2-2' }} $
-          </p>
+            <p>
+              <mat-icon>phone</mat-icon>
+              <span>
+                <strong>Téléphone client :</strong>
+                {{ order.clientPhoneNumber || 'Non disponible' }}
+              </span>
+            </p>
 
-          <h4>Articles</h4>
+            <p>
+              <mat-icon>location_on</mat-icon>
+              <span>
+                <strong>Adresse de livraison :</strong>
+                {{ order.deliveryAddress || 'Adresse non définie' }}
+              </span>
+            </p>
 
-          <ul>
-            @for (item of order.items; track item.dishId) {
-              <li>
-                {{ $any(item).dishName || 'Plat #' + item.dishId }} —
-                Quantité : {{ item.quantity }} —
-                Sous-total : {{ item.subTotal | number:'1.2-2' }} $
-              </li>
-            }
-          </ul>
+            <p>
+              <mat-icon>payments</mat-icon>
+              <span>
+                <strong>Total :</strong>
+                {{ order.totalAmount | number:'1.2-2' }} $
+              </span>
+            </p>
+          </div>
+
+          <div class="items-box">
+            <h4>
+              <mat-icon>restaurant_menu</mat-icon>
+              Articles
+            </h4>
+
+            <ul>
+              @for (item of order.items; track item.dishId) {
+                <li>
+                  <span>
+                    {{ item.dishName || 'Plat #' + item.dishId }}
+                  </span>
+
+                  <span>
+                    Quantité : {{ item.quantity }}
+                  </span>
+
+                  <strong>
+                    {{ item.subTotal | number:'1.2-2' }} $
+                  </strong>
+                </li>
+              }
+            </ul>
+          </div>
 
           <div class="status-box">
             <label>
@@ -68,14 +119,34 @@
               <select
                 [ngModel]="order.status"
                 (ngModelChange)="updateStatus(order, $event)"
-                name="livreur-status-{{ order.id }}"
+                name="status-{{ order.id }}"
               >
-                @for (status of statuses; track status) {
-                  <option [value]="status">{{ status }}</option>
+                @if (order.status === 'Preparing') {
+                  <option value="Preparing">Preparing</option>
+                  <option value="InDelivery">InDelivery</option>
+                }
+
+                @if (order.status === 'InDelivery') {
+                  <option value="InDelivery">InDelivery</option>
+                  <option value="Delivered">Delivered</option>
                 }
               </select>
             </label>
           </div>
+
+          @if (order.status === 'Preparing') {
+            <p class="info-message">
+              <mat-icon>inventory</mat-icon>
+              Cette commande est prête à être prise en livraison.
+            </p>
+          }
+
+          @if (order.status === 'InDelivery') {
+            <p class="delivery-message">
+              <mat-icon>local_shipping</mat-icon>
+              Cette commande est actuellement en cours de livraison.
+            </p>
+          }
         </article>
       }
     </div>

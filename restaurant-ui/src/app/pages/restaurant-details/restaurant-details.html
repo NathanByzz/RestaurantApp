@@ -1,7 +1,13 @@
 <section class="page">
-  <a routerLink="/restaurants" class="back-link">← Retour aux restaurants</a>
+  <a routerLink="/restaurants" class="back-link">
+  <mat-icon>arrow_back</mat-icon>
+  Retour aux restaurants
+</a>
 
-  <h2>Menu du restaurant</h2>
+  <h2 class="page-title">
+    <mat-icon>menu_book</mat-icon>
+    Menu du restaurant
+  </h2>
 
   @if (successMessage) {
     <p class="success">{{ successMessage }}</p>
@@ -16,23 +22,41 @@
   }
 
   @if (!isLoading && dishes.length === 0) {
-    <p>Aucun plat disponible pour ce restaurant.</p>
+    <div class="empty-menu">
+      <h3>Aucun plat disponible</h3>
+      <p>Ce restaurant n’a pas encore ajouté de plat à son menu.</p>
+    </div>
   }
 
   <div class="dish-grid">
     @for (dish of dishes; track dish.id) {
       <article class="dish-card">
-        <h3>{{ dish.name }}</h3>
-        <p>{{ dish.description }}</p>
+        <div>
+          <div class="dish-title">
+            <mat-icon>lunch_dining</mat-icon>
+            <h3>{{ dish.name }}</h3>
+          </div>
 
-        <p>
-          <strong>Catégorie :</strong>
-          {{ dish.categoryName || 'Non définie' }}
-        </p>
+          <p class="dish-description">
+            {{ dish.description }}
+          </p>
 
-        <p class="price">{{ dish.price | number:'1.2-2' }} $</p>
+          <p class="dish-info">
+            <mat-icon>category</mat-icon>
+            <span>
+              <strong>Catégorie :</strong>
+              {{ dish.categoryName || 'Non définie' }}
+            </span>
+          </p>
+
+          <p class="dish-info price">
+            <mat-icon>attach_money</mat-icon>
+            <span>{{ dish.price | number:'1.2-2' }} $</span>
+          </p>
+        </div>
 
         <button type="button" (click)="addToCart(dish)">
+          <mat-icon>add_shopping_cart</mat-icon>
           Ajouter au panier
         </button>
       </article>

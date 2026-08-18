@@ -2,6 +2,9 @@
   <mat-card class="register-card">
     <mat-card-header>
       <mat-card-title>Créer un compte {{ role }}</mat-card-title>
+      <mat-card-subtitle>
+        Remplissez les informations nécessaires pour créer votre compte.
+      </mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
@@ -25,22 +28,49 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Prénom</mat-label>
-          <input matInput type="text" name="firstName" [(ngModel)]="firstName" required>
+          <input
+            matInput
+            type="text"
+            name="firstName"
+            [(ngModel)]="firstName"
+            required
+          >
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Nom</mat-label>
-          <input matInput type="text" name="lastName" [(ngModel)]="lastName" required>
+          <input
+            matInput
+            type="text"
+            name="lastName"
+            [(ngModel)]="lastName"
+            required
+          >
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
-          <input matInput type="email" name="email" [(ngModel)]="email" required>
+          <input
+            matInput
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            required
+          >
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Téléphone</mat-label>
-          <input matInput type="text" name="phoneNumber" [(ngModel)]="phoneNumber" required>
+          <input
+            matInput
+            type="text"
+            name="phoneNumber"
+            [(ngModel)]="phoneNumber"
+            required
+            maxlength="10"
+            pattern="[0-9]{10}"
+            inputmode="numeric"
+          >
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -54,6 +84,10 @@
             minlength="8"
           >
         </mat-form-field>
+
+        <p class="password-hint">
+          Minimum 8 caractères, une majuscule, un chiffre et un caractère spécial.
+        </p>
 
         <button mat-raised-button type="submit">
           Créer le compte

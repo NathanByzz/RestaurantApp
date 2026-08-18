@@ -60,3 +60,17 @@ mat-form-field {
   color: var(--color-success);
   font-weight: bold;
 }
+
+.register-form mat-form-field {
+  width: 100%;
+}
+
+.register-form {
+  gap: 8px;
+}
+
+.password-hint {
+  margin: -8px 0 4px 0;
+  font-size: 12px;
+  color: var(--color-muted);
+}

@@ -11,16 +11,29 @@
 
   <div class="restaurant-grid">
     @for (restaurant of restaurants; track restaurant.id) {
-      <article class="restaurant-card">
-        <h3>{{ restaurant.name }}</h3>
-        <p>{{ restaurant.description }}</p>
-        <p><strong>Adresse :</strong> {{ restaurant.address }}</p>
-        <p><strong>Téléphone :</strong> {{ restaurant.phoneNumber }}</p>
+     <article class="restaurant-card">
+  <div class="card-title">
+    <mat-icon>storefront</mat-icon>
+    <h3>{{ restaurant.name }}</h3>
+  </div>
 
-        <a [routerLink]="['/restaurants', restaurant.id]">
-          Voir le menu
-        </a>
-      </article>
+  <p class="description">{{ restaurant.description }}</p>
+
+  <p class="info-line">
+    <mat-icon>location_on</mat-icon>
+    <span><strong>Adresse :</strong> {{ restaurant.address }}</span>
+  </p>
+
+  <p class="info-line">
+    <mat-icon>call</mat-icon>
+    <span><strong>Téléphone :</strong> {{ restaurant.phoneNumber }}</span>
+  </p>
+
+  <a [routerLink]="['/restaurants', restaurant.id]">
+    <mat-icon>menu_book</mat-icon>
+    Voir le menu
+  </a>
+</article>
     }
   </div>
 </section>

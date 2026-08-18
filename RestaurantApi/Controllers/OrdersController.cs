@@ -17,7 +17,7 @@ public class OrdersController : ControllerBase
     {
         _context = context;
     }
-    
+
     [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetOrders()
@@ -30,10 +30,20 @@ public class OrdersController : ControllerBase
                 o.Status,
                 o.TotalAmount,
                 o.DeliveryAddress,
+
                 o.ClientId,
-                ClientName = o.Client != null ? o.Client.FirstName + " " + o.Client.LastName : null,
+                ClientName = o.Client != null
+                    ? o.Client.FirstName + " " + o.Client.LastName
+                    : null,
+                ClientPhoneNumber = o.Client != null
+                    ? o.Client.PhoneNumber
+                    : null,
+
                 o.RestaurantId,
-                RestaurantName = o.Restaurant != null ? o.Restaurant.Name : null,
+                RestaurantName = o.Restaurant != null
+                    ? o.Restaurant.Name
+                    : null,
+
                 Items = o.Items.Select(i => new
                 {
                     i.Id,
@@ -64,10 +74,20 @@ public class OrdersController : ControllerBase
                 o.Status,
                 o.TotalAmount,
                 o.DeliveryAddress,
+
                 o.ClientId,
-                ClientName = o.Client != null ? o.Client.FirstName + " " + o.Client.LastName : null,
+                ClientName = o.Client != null
+                    ? o.Client.FirstName + " " + o.Client.LastName
+                    : null,
+                ClientPhoneNumber = o.Client != null
+                    ? o.Client.PhoneNumber
+                    : null,
+
                 o.RestaurantId,
-                RestaurantName = o.Restaurant != null ? o.Restaurant.Name : null,
+                RestaurantName = o.Restaurant != null
+                    ? o.Restaurant.Name
+                    : null,
+
                 Items = o.Items.Select(i => new
                 {
                     i.DishId,
@@ -110,8 +130,20 @@ public class OrdersController : ControllerBase
                 o.Status,
                 o.TotalAmount,
                 o.DeliveryAddress,
+
+                o.ClientId,
+                ClientName = o.Client != null
+                    ? o.Client.FirstName + " " + o.Client.LastName
+                    : null,
+                ClientPhoneNumber = o.Client != null
+                    ? o.Client.PhoneNumber
+                    : null,
+
                 o.RestaurantId,
-                RestaurantName = o.Restaurant != null ? o.Restaurant.Name : null,
+                RestaurantName = o.Restaurant != null
+                    ? o.Restaurant.Name
+                    : null,
+
                 Items = o.Items.Select(i => new
                 {
                     i.DishId,
@@ -149,8 +181,20 @@ public class OrdersController : ControllerBase
                 o.Status,
                 o.TotalAmount,
                 o.DeliveryAddress,
+
                 o.ClientId,
-                ClientName = o.Client != null ? o.Client.FirstName + " " + o.Client.LastName : null,
+                ClientName = o.Client != null
+                    ? o.Client.FirstName + " " + o.Client.LastName
+                    : null,
+                ClientPhoneNumber = o.Client != null
+                    ? o.Client.PhoneNumber
+                    : null,
+
+                o.RestaurantId,
+                RestaurantName = o.Restaurant != null
+                    ? o.Restaurant.Name
+                    : null,
+
                 Items = o.Items.Select(i => new
                 {
                     i.DishId,
@@ -185,7 +229,7 @@ public class OrdersController : ControllerBase
         {
             return BadRequest(new { message = "Le restaurant indiqué est invalide." });
         }
-        
+
         if (string.IsNullOrWhiteSpace(orderDto.DeliveryAddress))
         {
             return BadRequest(new
@@ -255,11 +299,16 @@ public class OrdersController : ControllerBase
                 order.Status,
                 order.TotalAmount,
                 order.DeliveryAddress,
+
                 order.ClientId,
+                ClientName = client.FirstName + " " + client.LastName,
+                ClientPhoneNumber = client.PhoneNumber,
+
                 order.RestaurantId,
                 Items = order.Items.Select(i => new
                 {
                     i.DishId,
+                    DishName = i.DishName,
                     i.Quantity,
                     i.UnitPrice,
                     SubTotal = i.Quantity * i.UnitPrice
@@ -269,84 +318,100 @@ public class OrdersController : ControllerBase
     }
 
     [Authorize(Roles = "Livreur,Restaurateur")]
-[HttpPut("{id:int}/status")]
-public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] string status)
-{
-    var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
-
-    var validStatuses = new[] { "Pending", "Preparing", "InDelivery", "Delivered", "Cancelled" };
-
-    if (!validStatuses.Contains(status))
+    [HttpPut("{id:int}/status")]
+    public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] string status)
     {
-        return BadRequest(new
+        var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+
+        var validStatuses = new[]
         {
-            message = "Statut invalide. Utilisez Pending, Preparing, InDelivery, Delivered ou Cancelled."
-        });
-    }
+            "Pending",
+            "Preparing",
+            "InDelivery",
+            "Delivered",
+            "Cancelled"
+        };
 
-    var order = await _context.Orders.FindAsync(id);
-
-    if (order == null)
-    {
-        return NotFound();
-    }
-
-    if (userRole == "Restaurateur")
-    {
-        if (order.Status == "InDelivery" || order.Status == "Delivered")
+        if (!validStatuses.Contains(status))
         {
             return BadRequest(new
             {
-                message = "Le restaurateur ne peut plus modifier une commande déjà prise en livraison ou livrée."
+                message = "Statut invalide. Utilisez Pending, Preparing, InDelivery, Delivered ou Cancelled."
             });
         }
 
-        var restaurateurStatuses = new[] { "Pending", "Preparing", "Cancelled" };
+        var order = await _context.Orders.FindAsync(id);
 
-        if (!restaurateurStatuses.Contains(status))
+        if (order == null)
         {
-            return Forbid();
+            return NotFound();
         }
+
+        if (userRole == "Restaurateur")
+        {
+            if (order.Status == "InDelivery" || order.Status == "Delivered")
+            {
+                return BadRequest(new
+                {
+                    message = "Le restaurateur ne peut plus modifier une commande déjà prise en livraison ou livrée."
+                });
+            }
+
+            var restaurateurStatuses = new[]
+            {
+                "Pending",
+                "Preparing",
+                "Cancelled"
+            };
+
+            if (!restaurateurStatuses.Contains(status))
+            {
+                return Forbid();
+            }
+        }
+
+        if (userRole == "Livreur")
+        {
+            if (order.Status == "Preparing" && status != "InDelivery")
+            {
+                return BadRequest(new
+                {
+                    message = "Le livreur doit d'abord passer la commande en livraison."
+                });
+            }
+
+            if (order.Status == "InDelivery" && status != "Delivered")
+            {
+                return BadRequest(new
+                {
+                    message = "Une commande en livraison peut seulement être marquée comme livrée."
+                });
+            }
+
+            if (order.Status != "Preparing" && order.Status != "InDelivery")
+            {
+                return BadRequest(new
+                {
+                    message = "Le livreur peut seulement modifier une commande en préparation ou en livraison."
+                });
+            }
+
+            var livreurStatuses = new[]
+            {
+                "InDelivery",
+                "Delivered"
+            };
+
+            if (!livreurStatuses.Contains(status))
+            {
+                return Forbid();
+            }
+        }
+
+        order.Status = status;
+
+        await _context.SaveChangesAsync();
+
+        return NoContent();
     }
-
-    if (userRole == "Livreur")
-    {
-        if (order.Status == "Preparing" && status != "InDelivery")
-        {
-            return BadRequest(new
-            {
-                message = "Le livreur doit d'abord passer la commande en livraison."
-            });
-        }
-
-        if (order.Status == "InDelivery" && status != "Delivered")
-        {
-            return BadRequest(new
-            {
-                message = "Une commande en livraison peut seulement être marquée comme livrée."
-            });
-        }
-
-        if (order.Status != "Preparing" && order.Status != "InDelivery")
-        {
-            return BadRequest(new
-            {
-                message = "Le livreur peut seulement modifier une commande en préparation ou en livraison."
-            });
-        }
-
-        var livreurStatuses = new[] { "InDelivery", "Delivered" };
-
-        if (!livreurStatuses.Contains(status))
-        {
-            return Forbid();
-        }
-    }
-
-    order.Status = status;
-
-    await _context.SaveChangesAsync();
-
-    return NoContent();
-}
 }

@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 
 import { Order } from '../../models/order.model';
 import { OrderService } from '../../services/order.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-livreur',
-  imports: [DecimalPipe, DatePipe, FormsModule],
+  imports: [DecimalPipe, DatePipe,MatIconModule, FormsModule],
   templateUrl: './livreur.html',
   styleUrl: './livreur.css'
 })
