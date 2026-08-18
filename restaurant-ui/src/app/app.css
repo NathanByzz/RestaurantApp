@@ -1,13 +1,12 @@
 .app-container {
-  font-family: Arial, sans-serif;
   min-height: 100vh;
-  background: #f7f7f7;
+  background: var(--color-background);
 }
 
 .app-header {
-  background: #222;
+  background: linear-gradient(90deg, #2563eb, #1e40af);
   color: white;
-  padding: 16px 32px;
+  padding: 18px 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,17 +14,24 @@
 
 .app-header h1 {
   margin: 0;
+  font-size: 30px;
+  font-weight: 700;
 }
 
 .app-header nav {
   display: flex;
-  gap: 16px;
+  align-items: center;
+  gap: 18px;
 }
 
-.app-header a {
+.app-header nav a {
   color: white;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
+}
+
+.app-header nav a:hover {
+  color: #dbeafe;
 }
 
 main {
@@ -44,5 +50,5 @@ main {
 
 .logout-button:hover {
   background: white;
-  color: #222;
+  color: #1e40af;
 }

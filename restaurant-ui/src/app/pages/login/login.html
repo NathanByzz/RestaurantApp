@@ -1,41 +1,61 @@
-<section class="page">
-  <h2>Connexion</h2>
+<section class="login-page">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Connexion</mat-card-title>
+    </mat-card-header>
 
-  @if (errorMessage) {
-    <p class="error">{{ errorMessage }}</p>
-  }
+    <mat-card-content>
+      @if (errorMessage) {
+        <p class="error">{{ errorMessage }}</p>
+      }
 
-  @if (successMessage) {
-    <p class="success">{{ successMessage }}</p>
-  }
+      @if (successMessage) {
+        <p class="success">{{ successMessage }}</p>
+      }
 
-  <form class="login-form" (ngSubmit)="login()">
-    <label>
-      Email
-      <input type="email" name="email" [(ngModel)]="email">
-    </label>
+      <form class="login-form" (ngSubmit)="login()">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            required
+          >
+        </mat-form-field>
 
-    <label>
-      Mot de passe
-      <input type="password" name="password" [(ngModel)]="password">
-    </label>
+        <mat-form-field appearance="outline">
+          <mat-label>Mot de passe</mat-label>
+          <input
+            matInput
+            type="password"
+            name="password"
+            [(ngModel)]="password"
+            required
+          >
+        </mat-form-field>
 
-    <button type="submit">Se connecter</button>
-  </form>
+        <button mat-raised-button color="primary" type="submit">
+          Se connecter
+        </button>
+      </form>
 
-  <div class="register-options">
-  <h3>Vous n’avez pas encore de compte ?</h3>
+      <div class="register-options">
+        <h3>Vous n’avez pas encore de compte ?</h3>
 
-  <a routerLink="/register" [queryParams]="{ role: 'Client' }">
-    Créer un compte client
-  </a>
+        <a mat-button routerLink="/register" [queryParams]="{ role: 'Client' }">
+          Créer un compte client
+        </a>
 
-  <a routerLink="/register" [queryParams]="{ role: 'Restaurateur' }">
-    Créer un compte restaurateur
-  </a>
+        <a mat-button routerLink="/register" [queryParams]="{ role: 'Restaurateur' }">
+          Créer un compte restaurateur
+        </a>
 
-  <a routerLink="/register" [queryParams]="{ role: 'Livreur' }">
-    Créer un compte livreur
-  </a>
-</div>
+        <a mat-button routerLink="/register" [queryParams]="{ role: 'Livreur' }">
+          Créer un compte livreur
+        </a>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </section>

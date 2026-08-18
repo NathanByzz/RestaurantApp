@@ -1,1 +1,279 @@
-/* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/azure-blue.css';
+
+/* =========================
+   Variables globales
+   ========================= */
+
+:root {
+  --color-primary: #2563eb;
+  --color-primary-hover: #1e40af;
+  --color-background: #f8fafc;
+  --color-card: #ffffff;
+  --color-text: #1f2937;
+  --color-muted: #64748b;
+  --color-success: #15803d;
+  --color-error: #b00020;
+  --color-border: #dbe3ef;
+}
+
+/* =========================
+   Base générale
+   ========================= */
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: Arial, sans-serif;
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+main {
+  padding: 32px;
+}
+
+/* =========================
+   Titres
+   ========================= */
+
+h2 {
+  color: var(--color-text);
+  font-size: 26px;
+  margin-bottom: 22px;
+}
+
+h3 {
+  color: var(--color-text);
+}
+
+/* =========================
+   Cartes globales
+   ========================= */
+
+.restaurant-card,
+.dish-card,
+.cart-item,
+.order-card,
+.total-box,
+.login-card,
+.register-card {
+  background: var(--color-card) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 10px 28px rgba(37, 99, 235, 0.08) !important;
+}
+
+.restaurant-card,
+.dish-card,
+.order-card,
+.cart-item {
+  padding: 22px !important;
+}
+
+.restaurant-card:hover,
+.dish-card:hover,
+.order-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(37, 99, 235, 0.14) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.restaurant-card h3,
+.dish-card h3,
+.order-card h3 {
+  margin-top: 0;
+}
+
+/* =========================
+   Boutons globaux
+   ========================= */
+
+.restaurant-card a,
+.dish-card button,
+.total-box button,
+.cart-item button:not(.danger),
+.order-card button,
+button:not(.logout-button):not(.danger),
+a.button-link {
+  background: var(--color-primary) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 10px 16px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  display: inline-block;
+}
+
+.restaurant-card a:hover,
+.dish-card button:hover,
+.total-box button:hover,
+.cart-item button:not(.danger):hover,
+.order-card button:hover,
+button:not(.logout-button):not(.danger):hover,
+a.button-link:hover {
+  background: var(--color-primary-hover) !important;
+}
+
+/* Boutons danger */
+
+.danger {
+  background: var(--color-error) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 10px 16px !important;
+  font-weight: bold !important;
+}
+
+.danger:hover {
+  background: #7f0018 !important;
+}
+
+/* Bouton déconnexion */
+
+.logout-button {
+  background: transparent !important;
+  color: white !important;
+  border: 1px solid white !important;
+  padding: 8px 12px !important;
+  border-radius: 8px !important;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.logout-button:hover {
+  background: white !important;
+  color: var(--color-primary-hover) !important;
+}
+
+/* =========================
+   Champs de formulaire
+   ========================= */
+
+input,
+select,
+textarea {
+  min-height: 38px;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 8px !important;
+  padding: 10px !important;
+  box-sizing: border-box;
+  background: white;
+  outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+/* Angular Material form fields */
+
+mat-form-field {
+  width: 100%;
+}
+
+/* =========================
+   Badges de statut
+   ========================= */
+
+.status {
+  background: var(--color-primary) !important;
+  color: white !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  font-weight: bold !important;
+}
+
+.status-Delivered,
+.status.delivered {
+  background: var(--color-success) !important;
+}
+
+.status-Pending,
+.status.pending {
+  background: var(--color-muted) !important;
+}
+
+.status-Preparing,
+.status.preparing {
+  background: var(--color-primary) !important;
+}
+
+.status-InDelivery,
+.status.indelivery {
+  background: #7c3aed !important;
+}
+
+.status-Cancelled,
+.status.cancelled {
+  background: var(--color-error) !important;
+}
+
+/* =========================
+   Messages
+   ========================= */
+
+.error {
+  color: var(--color-error) !important;
+  font-weight: bold;
+}
+
+.success {
+  color: var(--color-success) !important;
+  font-weight: bold;
+}
+
+/* =========================
+   Liens
+   ========================= */
+
+a {
+  color: var(--color-primary);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* =========================
+   Responsive
+   ========================= */
+
+@media (max-width: 768px) {
+  main {
+    padding: 20px;
+  }
+
+  .restaurant-grid,
+  .dish-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .cart-item {
+    grid-template-columns: 1fr !important;
+  }
+
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .app-header nav {
+    flex-wrap: wrap;
+  }
+}

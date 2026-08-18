@@ -1,60 +1,69 @@
-<section class="page">
-  <h2>Créer un compte {{ role }}</h2>
+<section class="register-page">
+  <mat-card class="register-card">
+    <mat-card-header>
+      <mat-card-title>Créer un compte {{ role }}</mat-card-title>
+    </mat-card-header>
 
-  @if (errorMessage) {
-    <p class="error">{{ errorMessage }}</p>
-  }
+    <mat-card-content>
+      @if (errorMessage) {
+        <p class="error">{{ errorMessage }}</p>
+      }
 
-  @if (successMessage) {
-    <p class="success">{{ successMessage }}</p>
-  }
+      @if (successMessage) {
+        <p class="success">{{ successMessage }}</p>
+      }
 
-  <form class="register-form" (ngSubmit)="register()">
-    <label>
-      Type de compte
-      <select name="role" [(ngModel)]="role" required>
-        <option value="Client">Client</option>
-        <option value="Restaurateur">Restaurateur</option>
-        <option value="Livreur">Livreur</option>
-      </select>
-    </label>
+      <form class="register-form" (ngSubmit)="register()">
+        <mat-form-field appearance="outline">
+          <mat-label>Type de compte</mat-label>
+          <mat-select name="role" [(ngModel)]="role" required>
+            <mat-option value="Client">Client</mat-option>
+            <mat-option value="Restaurateur">Restaurateur</mat-option>
+            <mat-option value="Livreur">Livreur</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-    <label>
-      Prénom
-      <input type="text" name="firstName" [(ngModel)]="firstName" required>
-    </label>
+        <mat-form-field appearance="outline">
+          <mat-label>Prénom</mat-label>
+          <input matInput type="text" name="firstName" [(ngModel)]="firstName" required>
+        </mat-form-field>
 
-    <label>
-      Nom
-      <input type="text" name="lastName" [(ngModel)]="lastName" required>
-    </label>
+        <mat-form-field appearance="outline">
+          <mat-label>Nom</mat-label>
+          <input matInput type="text" name="lastName" [(ngModel)]="lastName" required>
+        </mat-form-field>
 
-    <label>
-      Email
-      <input type="email" name="email" [(ngModel)]="email" required>
-    </label>
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" name="email" [(ngModel)]="email" required>
+        </mat-form-field>
 
-    <label>
-      Téléphone
-      <input type="text" name="phoneNumber" [(ngModel)]="phoneNumber" required>
-    </label>
+        <mat-form-field appearance="outline">
+          <mat-label>Téléphone</mat-label>
+          <input matInput type="text" name="phoneNumber" [(ngModel)]="phoneNumber" required>
+        </mat-form-field>
 
-    <label>
-      Mot de passe
-      <input
-  type="password"
-  name="password"
-  [(ngModel)]="password"
-  required
-  minlength="8"
->
-    </label>
+        <mat-form-field appearance="outline">
+          <mat-label>Mot de passe</mat-label>
+          <input
+            matInput
+            type="password"
+            name="password"
+            [(ngModel)]="password"
+            required
+            minlength="8"
+          >
+        </mat-form-field>
 
-    <button type="submit">Créer le compte</button>
-  </form>
+        <button mat-raised-button type="submit">
+          Créer le compte
+        </button>
+      </form>
 
-  <p class="login-link">
-    Déjà un compte ?
-    <a routerLink="/login">Se connecter</a>
-  </p>
+      <p class="login-link">
+        Déjà un compte ?
+        <a mat-button routerLink="/login">Se connecter</a>
+      </p>
+    </mat-card-content>
+  </mat-card>
 </section>

@@ -1,73 +1,79 @@
-.page {
-  max-width: 520px;
-  margin: 0 auto;
-  background: white;
+.login-page {
+  max-width: 560px;
+  margin: 45px auto;
+}
+
+.login-card {
   padding: 24px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
+  margin-top: 22px;
 }
 
-label {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+mat-form-field {
+  width: 100%;
+}
+
+.login-form button {
+  width: 100%;
+  height: 44px;
   font-weight: bold;
-}
-
-input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button {
-  background: #222;
+  background: var(--color-primary);
   color: white;
-  padding: 10px 14px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  border-radius: 6px;
+}
+
+.login-form button:hover {
+  background: var(--color-primary-hover);
 }
 
 .register-options {
-  margin-top: 28px;
-  padding-top: 18px;
-  border-top: 1px solid #ddd;
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .register-options h3 {
   margin: 0 0 8px 0;
+  color: var(--color-text);
 }
 
 .register-options a {
-  display: inline-block;
-  background: #f1f1f1;
-  color: #222;
-  padding: 10px 12px;
-  border-radius: 4px;
+  justify-content: flex-start;
+  color: var(--color-primary);
+  font-weight: 600;
   text-decoration: none;
-  font-weight: bold;
 }
 
 .register-options a:hover {
-  background: #ddd;
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+.login-card {
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12);
 }
 
 .error {
-  color: darkred;
+  color: var(--color-error);
   font-weight: bold;
 }
 
 .success {
-  color: darkgreen;
+  color: var(--color-success);
   font-weight: bold;
 }
