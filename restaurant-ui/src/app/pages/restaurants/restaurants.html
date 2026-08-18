@@ -1,0 +1,26 @@
+<section class="page">
+  <h2>Restaurants disponibles</h2>
+
+  @if (isLoading) {
+    <p>Chargement des restaurants...</p>
+  }
+
+  @if (errorMessage) {
+    <p class="error">{{ errorMessage }}</p>
+  }
+
+  <div class="restaurant-grid">
+    @for (restaurant of restaurants; track restaurant.id) {
+      <article class="restaurant-card">
+        <h3>{{ restaurant.name }}</h3>
+        <p>{{ restaurant.description }}</p>
+        <p><strong>Adresse :</strong> {{ restaurant.address }}</p>
+        <p><strong>Téléphone :</strong> {{ restaurant.phoneNumber }}</p>
+
+        <a [routerLink]="['/restaurants', restaurant.id]">
+          Voir le menu
+        </a>
+      </article>
+    }
+  </div>
+</section>

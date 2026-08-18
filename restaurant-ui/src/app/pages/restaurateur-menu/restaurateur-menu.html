@@ -1,0 +1,111 @@
+<section class="page">
+  <a routerLink="/restaurateur" class="back-link">← Retour à l’espace restaurateur</a>
+
+  <h2>Gestion du menu</h2>
+
+  @if (errorMessage) {
+    <p class="error">{{ errorMessage }}</p>
+  }
+
+  @if (successMessage) {
+    <p class="success">{{ successMessage }}</p>
+  }
+
+  <section class="form-card">
+    @if (editingDishId === null) {
+      <h3>Ajouter un plat</h3>
+    }
+
+    @if (editingDishId !== null) {
+      <h3>Modifier le plat #{{ editingDishId }}</h3>
+    }
+
+    <form class="dish-form" (ngSubmit)="saveDish()">
+      <label>
+        Nom du plat
+        <input type="text" name="name" [(ngModel)]="name">
+      </label>
+
+      <label>
+        Description
+        <input type="text" name="description" [(ngModel)]="description">
+      </label>
+
+      <label>
+        Prix
+        <input type="number" step="0.01" name="price" [(ngModel)]="price">
+      </label>
+
+      <label>
+        Image URL
+        <input type="text" name="imageUrl" [(ngModel)]="imageUrl">
+      </label>
+
+      <label>
+        Catégorie
+        <select name="categoryId" [(ngModel)]="categoryId">
+          <option [value]="1">Pizza</option>
+          <option [value]="2">Burger</option>
+          <option [value]="3">Boisson</option>
+          <option [value]="4">Dessert</option>
+          <option [value]="5">Africain</option>
+        </select>
+      </label>
+
+      <div class="form-actions">
+        @if (editingDishId === null) {
+          <button type="submit">Ajouter le plat</button>
+        }
+
+        @if (editingDishId !== null) {
+          <button type="submit">Mettre à jour le plat</button>
+
+          <button type="button" class="secondary" (click)="cancelEdit()">
+            Annuler
+          </button>
+        }
+      </div>
+    </form>
+  </section>
+
+  <section class="menu-section">
+    <h3>Plats du restaurant</h3>
+
+    @if (isLoading) {
+      <p>Chargement des plats...</p>
+    }
+
+    @if (!isLoading && dishes.length === 0) {
+      <p>Aucun plat dans ce restaurant.</p>
+    }
+
+    <div class="dish-grid">
+      @for (dish of dishes; track dish.id) {
+        <article class="dish-card">
+          <h3>{{ dish.name }}</h3>
+
+          <p>{{ dish.description }}</p>
+
+          <p>
+            <strong>Catégorie :</strong>
+            {{ dish.categoryName || 'Non définie' }}
+          </p>
+
+          <p class="price">
+            {{ dish.price | number:'1.2-2' }} $
+          </p>
+
+          <div class="card-actions">
+            <button type="button" (click)="startEdit(dish)">
+              Modifier
+            </button>
+
+            <button type="button" class="danger" (click)="deleteDish(dish.id)">
+              Supprimer
+            </button>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+</section>

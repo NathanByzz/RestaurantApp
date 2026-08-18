@@ -1,0 +1,37 @@
+<div class="app-container">
+  <header class="app-header">
+    <h1>RestaurantApp</h1>
+
+    <nav>
+      @if (authService.isLoggedIn() && authService.getUser()?.role === 'Client') {
+        <a routerLink="/restaurants">Restaurants</a>
+        <a routerLink="/cart">Panier</a>
+        <a routerLink="/mes-commandes">Mes commandes</a>
+      }
+
+      @if (authService.isLoggedIn() && authService.getUser()?.role === 'Restaurateur') {
+        <a routerLink="/restaurateur">Espace restaurateur</a>
+        <a routerLink="/restaurateur/commandes">Commandes reçues</a>
+
+      }
+
+      @if (authService.isLoggedIn() && authService.getUser()?.role === 'Livreur') {
+  <a routerLink="/livreur">Espace livreur</a>
+}
+
+      @if (authService.isLoggedIn()) {
+        <button type="button" class="logout-button" (click)="logout()">
+          Déconnexion
+        </button>
+      }
+
+      @if (!authService.isLoggedIn()) {
+        <a routerLink="/login">Connexion</a>
+      }
+    </nav>
+  </header>
+
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+</div>

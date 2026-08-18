@@ -1,0 +1,105 @@
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: #222;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.form-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 22px;
+  margin-bottom: 28px;
+}
+
+.dish-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: bold;
+}
+
+input,
+select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  background: #222;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.form-actions {
+  grid-column: span 2;
+  display: flex;
+  gap: 12px;
+}
+
+.secondary {
+  background: #666;
+}
+
+.menu-section {
+  margin-top: 24px;
+}
+
+.dish-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.dish-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.dish-card h3 {
+  margin-top: 0;
+}
+
+.price {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.card-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.danger {
+  background: darkred;
+}
+
+.error {
+  color: darkred;
+  font-weight: bold;
+}
+
+.success {
+  color: darkgreen;
+  font-weight: bold;
+}

@@ -1,0 +1,20 @@
+export interface OrderItem {
+  dishId: number;
+  dishName?: string;
+  quantity: number;
+  unitPrice: number;
+  subTotal: number;
+}
+
+export interface Order {
+  id: number;
+  createdAt: string;
+  status: string;
+  totalAmount: number;
+  deliveryAddress: string;
+  clientId: number;
+  clientName?: string;
+  restaurantId: number;
+  restaurantName?: string;
+  items: OrderItem[];
+}

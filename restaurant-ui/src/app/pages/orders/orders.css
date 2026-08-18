@@ -1,0 +1,45 @@
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.order-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-header h3 {
+  margin-top: 0;
+}
+
+.status {
+  background: #222;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.error {
+  color: darkred;
+  font-weight: bold;
+}
+
+.back-link {
+  color: #222;
+  font-weight: bold;
+}

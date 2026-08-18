@@ -1,0 +1,60 @@
+<section class="page">
+  <h2>Créer un compte {{ role }}</h2>
+
+  @if (errorMessage) {
+    <p class="error">{{ errorMessage }}</p>
+  }
+
+  @if (successMessage) {
+    <p class="success">{{ successMessage }}</p>
+  }
+
+  <form class="register-form" (ngSubmit)="register()">
+    <label>
+      Type de compte
+      <select name="role" [(ngModel)]="role" required>
+        <option value="Client">Client</option>
+        <option value="Restaurateur">Restaurateur</option>
+        <option value="Livreur">Livreur</option>
+      </select>
+    </label>
+
+    <label>
+      Prénom
+      <input type="text" name="firstName" [(ngModel)]="firstName" required>
+    </label>
+
+    <label>
+      Nom
+      <input type="text" name="lastName" [(ngModel)]="lastName" required>
+    </label>
+
+    <label>
+      Email
+      <input type="email" name="email" [(ngModel)]="email" required>
+    </label>
+
+    <label>
+      Téléphone
+      <input type="text" name="phoneNumber" [(ngModel)]="phoneNumber" required>
+    </label>
+
+    <label>
+      Mot de passe
+      <input
+  type="password"
+  name="password"
+  [(ngModel)]="password"
+  required
+  minlength="8"
+>
+    </label>
+
+    <button type="submit">Créer le compte</button>
+  </form>
+
+  <p class="login-link">
+    Déjà un compte ?
+    <a routerLink="/login">Se connecter</a>
+  </p>
+</section>

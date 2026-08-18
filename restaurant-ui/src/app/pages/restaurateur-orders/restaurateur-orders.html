@@ -1,0 +1,93 @@
+<section class="page">
+  <a routerLink="/restaurateur" class="back-link">← Retour à l’espace restaurateur</a>
+
+  <h2>Commandes reçues</h2>
+
+  @if (errorMessage) {
+    <p class="error">{{ errorMessage }}</p>
+  }
+
+  @if (successMessage) {
+    <p class="success">{{ successMessage }}</p>
+  }
+
+  @if (isLoading) {
+    <p>Chargement des commandes reçues...</p>
+  }
+
+  @if (!isLoading && orders.length === 0) {
+    <p>Aucune commande reçue pour vos restaurants.</p>
+  }
+
+  @if (orders.length > 0) {
+    <div class="orders-list">
+      @for (order of orders; track order.id) {
+        <article class="order-card">
+          <div class="order-header">
+            <div>
+              <h3>Commande #{{ order.id }}</h3>
+
+              <p>
+                <strong>Restaurant :</strong>
+                {{ order.restaurantName || getRestaurantName(order.restaurantId) }}
+              </p>
+            </div>
+
+            <span class="status">{{ order.status }}</span>
+          </div>
+
+          <p>
+            <strong>Date :</strong>
+            {{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}
+          </p>
+
+          <p>
+            <strong>Adresse de livraison :</strong>
+            {{ order.deliveryAddress }}
+          </p>
+
+          <p>
+            <strong>Total :</strong>
+            {{ order.totalAmount | number:'1.2-2' }} $
+          </p>
+
+          <h4>Articles</h4>
+
+          <ul>
+            @for (item of order.items; track item.dishId) {
+              <li>
+                {{ $any(item).dishName || 'Plat #' + item.dishId }} —
+                Quantité : {{ item.quantity }} —
+                Sous-total : {{ item.subTotal | number:'1.2-2' }} $
+              </li>
+            }
+          </ul>
+
+          @if (order.status !== 'InDelivery' && order.status !== 'Delivered') {
+  <div class="status-box">
+    <label>
+      Modifier le statut
+
+      <select
+        [ngModel]="order.status"
+        (ngModelChange)="updateStatus(order, $event)"
+        name="status-{{ order.id }}"
+      >
+        @for (status of statuses; track status) {
+          <option [value]="status">{{ status }}</option>
+        }
+      </select>
+    </label>
+  </div>
+}
+
+@if (order.status === 'InDelivery' || order.status === 'Delivered') {
+  <p class="locked-status">
+    Cette commande est maintenant prise en charge par le livreur.
+  </p>
+}
+        </article>
+      }
+    </div>
+  }
+</section>

@@ -1,0 +1,56 @@
+<section class="page">
+  <h2>Mes commandes</h2>
+
+  @if (isLoading) {
+    <p>Chargement de vos commandes...</p>
+  }
+
+  @if (errorMessage) {
+    <p class="error">{{ errorMessage }}</p>
+  }
+
+  @if (!isLoading && orders.length === 0) {
+    <p>Vous n’avez pas encore passé de commande.</p>
+    <a routerLink="/restaurants" class="back-link">Voir les restaurants</a>
+  }
+
+  @if (orders.length > 0) {
+    <div class="orders-list">
+      @for (order of orders; track order.id) {
+        <article class="order-card">
+          <div class="order-header">
+            <h3>Commande #{{ order.id }}</h3>
+            <span class="status">{{ order.status }}</span>
+          </div>
+
+          <p>
+            <strong>Date :</strong>
+            {{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}
+          </p>
+
+          <p>
+            <strong>Adresse :</strong>
+            {{ order.deliveryAddress }}
+          </p>
+
+          <p>
+            <strong>Total :</strong>
+            {{ order.totalAmount | number:'1.2-2' }} $
+          </p>
+
+          <h4>Articles</h4>
+
+          <ul>
+            @for (item of order.items; track item.dishId) {
+              <li>
+                {{ $any(item).dishName || 'Plat #' + item.dishId }} —
+                Quantité : {{ item.quantity }} —
+                Sous-total : {{ item.subTotal | number:'1.2-2' }} $
+              </li>
+            }
+          </ul>
+        </article>
+      }
+    </div>
+  }
+</section>

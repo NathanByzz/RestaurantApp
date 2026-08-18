@@ -1,0 +1,66 @@
+<section class="page">
+  <h2>Espace restaurateur</h2>
+
+  @if (errorMessage) {
+    <p class="error">{{ errorMessage }}</p>
+  }
+
+  @if (successMessage) {
+    <p class="success">{{ successMessage }}</p>
+  }
+
+  <section class="form-card">
+    <h3>Créer un restaurant</h3>
+
+    <form class="restaurant-form" (ngSubmit)="createRestaurant()">
+      <label>
+        Nom du restaurant
+        <input type="text" name="name" [(ngModel)]="name">
+      </label>
+
+      <label>
+        Description
+        <input type="text" name="description" [(ngModel)]="description">
+      </label>
+
+      <label>
+        Adresse
+        <input type="text" name="address" [(ngModel)]="address">
+      </label>
+
+      <label>
+        Téléphone
+        <input type="text" name="phoneNumber" [(ngModel)]="phoneNumber">
+      </label>
+
+      <button type="submit">Créer le restaurant</button>
+    </form>
+  </section>
+
+  <section class="restaurants-section">
+    <h3>Mes restaurants</h3>
+
+    @if (isLoading) {
+      <p>Chargement de vos restaurants...</p>
+    }
+
+    @if (!isLoading && restaurants.length === 0) {
+      <p>Vous n’avez pas encore créé de restaurant.</p>
+    }
+
+    <div class="restaurant-grid">
+      @for (restaurant of restaurants; track restaurant.id) {
+        <article class="restaurant-card">
+          <h3>{{ restaurant.name }}</h3>
+          <p>{{ restaurant.description }}</p>
+          <p><strong>Adresse :</strong> {{ restaurant.address }}</p>
+          <p><strong>Téléphone :</strong> {{ restaurant.phoneNumber }}</p>
+
+          <a [routerLink]="['/restaurateur/restaurants', restaurant.id, 'menu']">
+            Gérer le menu
+          </a>
+        </article>
+      }
+    </div>
+  </section>
+</section>

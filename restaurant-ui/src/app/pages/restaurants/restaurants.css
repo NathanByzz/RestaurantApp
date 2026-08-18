@@ -1,0 +1,35 @@
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.restaurant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.restaurant-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.restaurant-card h3 {
+  margin-top: 0;
+}
+
+.restaurant-card a {
+  display: inline-block;
+  margin-top: 12px;
+  color: white;
+  background: #222;
+  padding: 10px 14px;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.error {
+  color: darkred;
+}

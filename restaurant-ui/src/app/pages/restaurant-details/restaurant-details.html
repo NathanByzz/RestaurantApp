@@ -1,0 +1,41 @@
+<section class="page">
+  <a routerLink="/restaurants" class="back-link">← Retour aux restaurants</a>
+
+  <h2>Menu du restaurant</h2>
+
+  @if (successMessage) {
+    <p class="success">{{ successMessage }}</p>
+  }
+
+  @if (isLoading) {
+    <p>Chargement du menu...</p>
+  }
+
+  @if (errorMessage) {
+    <p class="error">{{ errorMessage }}</p>
+  }
+
+  @if (!isLoading && dishes.length === 0) {
+    <p>Aucun plat disponible pour ce restaurant.</p>
+  }
+
+  <div class="dish-grid">
+    @for (dish of dishes; track dish.id) {
+      <article class="dish-card">
+        <h3>{{ dish.name }}</h3>
+        <p>{{ dish.description }}</p>
+
+        <p>
+          <strong>Catégorie :</strong>
+          {{ dish.categoryName || 'Non définie' }}
+        </p>
+
+        <p class="price">{{ dish.price | number:'1.2-2' }} $</p>
+
+        <button type="button" (click)="addToCart(dish)">
+          Ajouter au panier
+        </button>
+      </article>
+    }
+  </div>
+</section>

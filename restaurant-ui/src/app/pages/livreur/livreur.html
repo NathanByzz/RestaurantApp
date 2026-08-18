@@ -1,0 +1,83 @@
+<section class="page">
+  <h2>Espace livreur</h2>
+
+  @if (errorMessage) {
+    <p class="error">{{ errorMessage }}</p>
+  }
+
+  @if (successMessage) {
+    <p class="success">{{ successMessage }}</p>
+  }
+
+  @if (isLoading) {
+    <p>Chargement des commandes à livrer...</p>
+  }
+
+  @if (!isLoading && orders.length === 0) {
+    <p>Aucune commande à livrer pour le moment.</p>
+  }
+
+  @if (orders.length > 0) {
+    <div class="orders-list">
+      @for (order of orders; track order.id) {
+        <article class="order-card">
+          <div class="order-header">
+            <div>
+              <h3>Commande #{{ order.id }}</h3>
+
+              <p>
+                <strong>Restaurant :</strong>
+                {{ order.restaurantName || 'Restaurant #' + order.restaurantId }}
+              </p>
+            </div>
+
+            <span class="status">{{ order.status }}</span>
+          </div>
+
+          <p>
+            <strong>Date :</strong>
+            {{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}
+          </p>
+
+          <p>
+            <strong>Adresse de livraison :</strong>
+            {{ order.deliveryAddress }}
+          </p>
+
+          <p>
+            <strong>Total :</strong>
+            {{ order.totalAmount | number:'1.2-2' }} $
+          </p>
+
+          <h4>Articles</h4>
+
+          <ul>
+            @for (item of order.items; track item.dishId) {
+              <li>
+                {{ $any(item).dishName || 'Plat #' + item.dishId }} —
+                Quantité : {{ item.quantity }} —
+                Sous-total : {{ item.subTotal | number:'1.2-2' }} $
+              </li>
+            }
+          </ul>
+
+          <div class="status-box">
+            <label>
+              Modifier le statut
+
+              <select
+                [ngModel]="order.status"
+                (ngModelChange)="updateStatus(order, $event)"
+                name="livreur-status-{{ order.id }}"
+              >
+                @for (status of statuses; track status) {
+                  <option [value]="status">{{ status }}</option>
+                }
+              </select>
+            </label>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</section>

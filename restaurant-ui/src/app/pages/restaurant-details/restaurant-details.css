@@ -1,0 +1,52 @@
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: #222;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.dish-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.dish-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.dish-card h3 {
+  margin-top: 0;
+}
+
+.price {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+button {
+  background: #222;
+  color: white;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.error {
+  color: darkred;
+}
+
+.success {
+  color: darkgreen;
+  font-weight: bold;
+}

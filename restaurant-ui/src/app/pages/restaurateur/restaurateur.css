@@ -1,0 +1,84 @@
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.form-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 22px;
+  margin-bottom: 28px;
+}
+
+.restaurant-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: bold;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  grid-column: span 2;
+  background: #222;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.restaurants-section {
+  margin-top: 24px;
+}
+
+.restaurant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.restaurant-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.restaurant-card h3 {
+  margin-top: 0;
+}
+
+.restaurant-card a {
+  display: inline-block;
+  margin-top: 12px;
+  background: #222;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.error {
+  color: darkred;
+  font-weight: bold;
+}
+
+.success {
+  color: darkgreen;
+  font-weight: bold;
+}

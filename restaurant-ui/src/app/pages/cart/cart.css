@@ -1,0 +1,67 @@
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.cart-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cart-item {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 18px;
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 20px;
+  align-items: center;
+}
+
+.cart-item h3 {
+  margin-top: 0;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quantity-controls button,
+.total-box button {
+  background: #222;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.danger {
+  background: darkred;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.subtotal {
+  font-weight: bold;
+}
+
+.total-box {
+  margin-top: 24px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.back-link {
+  color: #222;
+  font-weight: bold;
+}
