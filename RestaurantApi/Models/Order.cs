@@ -20,5 +20,9 @@ public class Order
 
     public Restaurant? Restaurant { get; set; }
 
+    public int? DeliveryPersonId { get; set; }
+
+    public User? DeliveryPerson { get; set; }
+
     public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
 }

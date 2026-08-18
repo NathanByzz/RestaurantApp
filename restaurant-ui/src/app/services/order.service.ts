@@ -38,7 +38,7 @@ export class OrderService {
     const token = this.authService.getToken();
 
     if (!token) {
-      throw new Error('Vous devez être connecté pour voir vos commandes.');
+      throw new Error('Vous devez être connecté pour voir les commandes.');
     }
 
     const response = await fetch(this.apiUrl, {
@@ -88,6 +88,38 @@ export class OrderService {
     return await response.json();
   }
 
+  async getOrdersForDelivery(): Promise<Order[]> {
+    const orders = await this.getOrders();
+
+    return orders
+      .filter(order =>
+        order.status === 'Preparing' ||
+        order.status === 'InDelivery'
+      )
+      .sort((a, b) => {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      });
+  }
+
+  async takeOrder(orderId: number): Promise<void> {
+    const token = this.authService.getToken();
+
+    if (!token) {
+      throw new Error('Vous devez être connecté.');
+    }
+
+    const response = await fetch(`${this.apiUrl}/${orderId}/take`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erreur lors de la prise en charge de la commande : ${response.status}`);
+    }
+  }
+
   async updateOrderStatus(orderId: number, status: string): Promise<void> {
     const token = this.authService.getToken();
 
@@ -108,16 +140,4 @@ export class OrderService {
       throw new Error(`Erreur lors de la modification du statut : ${response.status}`);
     }
   }
-  async getOrdersForDelivery(): Promise<Order[]> {
-  const orders = await this.getOrders();
-
-  return orders
-    .filter(order =>
-      order.status === 'Preparing' ||
-      order.status === 'InDelivery'
-    )
-    .sort((a, b) => {
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    });
-}
 }

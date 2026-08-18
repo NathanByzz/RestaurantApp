@@ -4,6 +4,7 @@ using RestaurantApi.Data;
 using RestaurantApi.DTOs;
 using RestaurantApi.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace RestaurantApi.Controllers;
 
@@ -22,7 +23,25 @@ public class OrdersController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetOrders()
     {
-        var orders = await _context.Orders
+        var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        var query = _context.Orders.AsQueryable();
+
+        if (userRole == "Livreur")
+        {
+            if (!int.TryParse(userIdClaim, out var livreurId))
+            {
+                return Unauthorized(new { message = "Identifiant utilisateur invalide." });
+            }
+
+            query = query.Where(o =>
+                (o.Status == "Preparing" && o.DeliveryPersonId == null) ||
+                (o.Status == "InDelivery" && o.DeliveryPersonId == livreurId)
+            );
+        }
+
+        var orders = await query
             .Select(o => new
             {
                 o.Id,
@@ -42,6 +61,11 @@ public class OrdersController : ControllerBase
                 o.RestaurantId,
                 RestaurantName = o.Restaurant != null
                     ? o.Restaurant.Name
+                    : null,
+
+                o.DeliveryPersonId,
+                DeliveryPersonName = o.DeliveryPerson != null
+                    ? o.DeliveryPerson.FirstName + " " + o.DeliveryPerson.LastName
                     : null,
 
                 Items = o.Items.Select(i => new
@@ -86,6 +110,11 @@ public class OrdersController : ControllerBase
                 o.RestaurantId,
                 RestaurantName = o.Restaurant != null
                     ? o.Restaurant.Name
+                    : null,
+
+                o.DeliveryPersonId,
+                DeliveryPersonName = o.DeliveryPerson != null
+                    ? o.DeliveryPerson.FirstName + " " + o.DeliveryPerson.LastName
                     : null,
 
                 Items = o.Items.Select(i => new
@@ -144,6 +173,11 @@ public class OrdersController : ControllerBase
                     ? o.Restaurant.Name
                     : null,
 
+                o.DeliveryPersonId,
+                DeliveryPersonName = o.DeliveryPerson != null
+                    ? o.DeliveryPerson.FirstName + " " + o.DeliveryPerson.LastName
+                    : null,
+
                 Items = o.Items.Select(i => new
                 {
                     i.DishId,
@@ -193,6 +227,11 @@ public class OrdersController : ControllerBase
                 o.RestaurantId,
                 RestaurantName = o.Restaurant != null
                     ? o.Restaurant.Name
+                    : null,
+
+                o.DeliveryPersonId,
+                DeliveryPersonName = o.DeliveryPerson != null
+                    ? o.DeliveryPerson.FirstName + " " + o.DeliveryPerson.LastName
                     : null,
 
                 Items = o.Items.Select(i => new
@@ -262,7 +301,8 @@ public class OrdersController : ControllerBase
             RestaurantId = orderDto.RestaurantId,
             DeliveryAddress = orderDto.DeliveryAddress,
             Status = "Pending",
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            DeliveryPersonId = null
         };
 
         foreach (var itemDto in orderDto.Items)
@@ -305,6 +345,8 @@ public class OrdersController : ControllerBase
                 ClientPhoneNumber = client.PhoneNumber,
 
                 order.RestaurantId,
+                order.DeliveryPersonId,
+
                 Items = order.Items.Select(i => new
                 {
                     i.DishId,
@@ -317,11 +359,60 @@ public class OrdersController : ControllerBase
         );
     }
 
+    [Authorize(Roles = "Livreur")]
+    [HttpPut("{id:int}/take")]
+    public async Task<IActionResult> TakeOrder(int id)
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (!int.TryParse(userIdClaim, out var livreurId))
+        {
+            return Unauthorized(new { message = "Identifiant livreur invalide." });
+        }
+
+        var order = await _context.Orders.FindAsync(id);
+
+        if (order == null)
+        {
+            return NotFound(new { message = "Commande introuvable." });
+        }
+
+        if (order.Status != "Preparing")
+        {
+            return BadRequest(new
+            {
+                message = "Seules les commandes en préparation peuvent être prises par un livreur."
+            });
+        }
+
+        if (order.DeliveryPersonId != null)
+        {
+            return BadRequest(new
+            {
+                message = "Cette commande a déjà été prise par un autre livreur."
+            });
+        }
+
+        order.DeliveryPersonId = livreurId;
+        order.Status = "InDelivery";
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new
+        {
+            message = "Commande prise en charge avec succès.",
+            order.Id,
+            order.Status,
+            order.DeliveryPersonId
+        });
+    }
+
     [Authorize(Roles = "Livreur,Restaurateur")]
     [HttpPut("{id:int}/status")]
     public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] string status)
     {
-        var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+        var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         var validStatuses = new[]
         {
@@ -344,7 +435,7 @@ public class OrdersController : ControllerBase
 
         if (order == null)
         {
-            return NotFound();
+            return NotFound(new { message = "Commande introuvable." });
         }
 
         if (userRole == "Restaurateur")
@@ -368,50 +459,71 @@ public class OrdersController : ControllerBase
             {
                 return Forbid();
             }
+
+            order.Status = status;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         if (userRole == "Livreur")
         {
-            if (order.Status == "Preparing" && status != "InDelivery")
+            if (!int.TryParse(userIdClaim, out var livreurId))
             {
-                return BadRequest(new
+                return Unauthorized(new { message = "Identifiant livreur invalide." });
+            }
+
+            if (status == "InDelivery")
+            {
+                if (order.Status != "Preparing")
                 {
-                    message = "Le livreur doit d'abord passer la commande en livraison."
-                });
-            }
+                    return BadRequest(new
+                    {
+                        message = "Le livreur peut seulement prendre une commande en préparation."
+                    });
+                }
 
-            if (order.Status == "InDelivery" && status != "Delivered")
-            {
-                return BadRequest(new
+                if (order.DeliveryPersonId != null)
                 {
-                    message = "Une commande en livraison peut seulement être marquée comme livrée."
-                });
+                    return BadRequest(new
+                    {
+                        message = "Cette commande a déjà été prise par un autre livreur."
+                    });
+                }
+
+                order.DeliveryPersonId = livreurId;
+                order.Status = "InDelivery";
+
+                await _context.SaveChangesAsync();
+
+                return NoContent();
             }
 
-            if (order.Status != "Preparing" && order.Status != "InDelivery")
+            if (status == "Delivered")
             {
-                return BadRequest(new
+                if (order.Status != "InDelivery")
                 {
-                    message = "Le livreur peut seulement modifier une commande en préparation ou en livraison."
-                });
+                    return BadRequest(new
+                    {
+                        message = "Seule une commande en livraison peut être marquée comme livrée."
+                    });
+                }
+
+                if (order.DeliveryPersonId != livreurId)
+                {
+                    return Forbid();
+                }
+
+                order.Status = "Delivered";
+
+                await _context.SaveChangesAsync();
+
+                return NoContent();
             }
 
-            var livreurStatuses = new[]
-            {
-                "InDelivery",
-                "Delivered"
-            };
-
-            if (!livreurStatuses.Contains(status))
-            {
-                return Forbid();
-            }
+            return Forbid();
         }
 
-        order.Status = status;
-
-        await _context.SaveChangesAsync();
-
-        return NoContent();
+        return Forbid();
     }
 }

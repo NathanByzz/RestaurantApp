@@ -20,5 +20,8 @@ export interface Order {
   restaurantId: number;
   restaurantName?: string;
 
+  deliveryPersonId?: number | null;
+  deliveryPersonName?: string | null;
+
   items: OrderItem[];
 }

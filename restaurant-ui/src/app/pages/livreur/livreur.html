@@ -112,29 +112,14 @@
             </ul>
           </div>
 
-          <div class="status-box">
-            <label>
-              Modifier le statut
-
-              <select
-                [ngModel]="order.status"
-                (ngModelChange)="updateStatus(order, $event)"
-                name="status-{{ order.id }}"
-              >
-                @if (order.status === 'Preparing') {
-                  <option value="Preparing">Preparing</option>
-                  <option value="InDelivery">InDelivery</option>
-                }
-
-                @if (order.status === 'InDelivery') {
-                  <option value="InDelivery">InDelivery</option>
-                  <option value="Delivered">Delivered</option>
-                }
-              </select>
-            </label>
-          </div>
-
           @if (order.status === 'Preparing') {
+            <div class="delivery-actions">
+              <button type="button" (click)="takeOrder(order)">
+                <mat-icon>check_circle</mat-icon>
+                Prendre la commande
+              </button>
+            </div>
+
             <p class="info-message">
               <mat-icon>inventory</mat-icon>
               Cette commande est prête à être prise en livraison.
@@ -142,6 +127,13 @@
           }
 
           @if (order.status === 'InDelivery') {
+            <div class="delivery-actions">
+              <button type="button" (click)="markAsDelivered(order)">
+                <mat-icon>done_all</mat-icon>
+                Marquer comme livrée
+              </button>
+            </div>
+
             <p class="delivery-message">
               <mat-icon>local_shipping</mat-icon>
               Cette commande est actuellement en cours de livraison.

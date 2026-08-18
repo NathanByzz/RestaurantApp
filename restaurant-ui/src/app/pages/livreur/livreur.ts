@@ -4,18 +4,22 @@ import { FormsModule } from '@angular/forms';
 
 import { Order } from '../../models/order.model';
 import { OrderService } from '../../services/order.service';
+
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-livreur',
-  imports: [DecimalPipe, DatePipe,MatIconModule, FormsModule],
+  imports: [
+    DecimalPipe,
+    DatePipe,
+    FormsModule,
+    MatIconModule
+  ],
   templateUrl: './livreur.html',
   styleUrl: './livreur.css'
 })
 export class Livreur implements OnInit {
   orders: Order[] = [];
-
-  statuses = ['InDelivery', 'Delivered'];
 
   isLoading = true;
   errorMessage = '';
@@ -46,23 +50,39 @@ export class Livreur implements OnInit {
     }
   }
 
-  async updateStatus(order: Order, newStatus: string): Promise<void> {
+  async takeOrder(order: Order): Promise<void> {
     this.errorMessage = '';
     this.successMessage = '';
 
     try {
-      await this.orderService.updateOrderStatus(order.id, newStatus);
+      await this.orderService.takeOrder(order.id);
 
-      order.status = newStatus;
-      this.successMessage = `Statut de la commande #${order.id} modifié avec succès.`;
+      this.successMessage = `Commande #${order.id} prise en charge avec succès.`;
 
-      if (newStatus === 'Delivered') {
-        this.orders = this.orders.filter(o => o.id !== order.id);
-      }
+      await this.loadOrders();
 
       this.cdr.detectChanges();
     } catch (error) {
-      this.errorMessage = 'Impossible de modifier le statut de la commande.';
+      this.errorMessage = 'Impossible de prendre cette commande. Elle a peut-être déjà été prise par un autre livreur.';
+      console.error(error);
+      this.cdr.detectChanges();
+    }
+  }
+
+  async markAsDelivered(order: Order): Promise<void> {
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    try {
+      await this.orderService.updateOrderStatus(order.id, 'Delivered');
+
+      this.successMessage = `Commande #${order.id} marquée comme livrée.`;
+
+      this.orders = this.orders.filter(o => o.id !== order.id);
+
+      this.cdr.detectChanges();
+    } catch (error) {
+      this.errorMessage = 'Impossible de marquer cette commande comme livrée.';
       console.error(error);
       this.cdr.detectChanges();
     }
