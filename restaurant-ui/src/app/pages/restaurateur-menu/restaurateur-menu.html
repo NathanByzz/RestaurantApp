@@ -167,59 +167,67 @@
   </section>
 
   <section class="menu-section">
-    <h3 class="section-title">
-      <mat-icon>restaurant</mat-icon>
-      Plats du restaurant
-    </h3>
+  <h3 class="section-title">
+    <mat-icon>restaurant</mat-icon>
+    Plats du restaurant
+  </h3>
 
-    @if (isLoading) {
-      <p>Chargement des plats...</p>
-    }
+  @if (isLoading) {
+    <p>Chargement des plats...</p>
+  }
 
-    @if (!isLoading && dishes.length === 0) {
-      <p>Aucun plat dans ce restaurant.</p>
-    }
+  @if (!isLoading && dishes.length === 0) {
+    <p>Aucun plat dans ce restaurant.</p>
+  }
 
-    @if (!isLoading && dishes.length > 0) {
-      <div class="dish-grid">
-        @for (dish of dishes; track dish.id) {
-          <article class="dish-card">
-            <div class="dish-title">
-              <mat-icon>restaurant</mat-icon>
-              <h3>{{ dish.name }}</h3>
-            </div>
+  @if (!isLoading && dishes.length > 0) {
+    <div class="dish-grid">
+      @for (dish of dishes; track dish.id) {
+        <article class="dish-card">
+          @if (dish.imageUrl) {
+            <img
+              [src]="dish.imageUrl"
+              [alt]="dish.name"
+              class="dish-image"
+            >
+          }
 
-            <p class="dish-description">
-              {{ dish.description }}
-            </p>
+          <div class="dish-title">
+            <mat-icon>restaurant</mat-icon>
+            <h3>{{ dish.name }}</h3>
+          </div>
 
-            <p class="dish-info">
-              <mat-icon>category</mat-icon>
-              <span>
-                <strong>Catégorie :</strong>
-                {{ dish.categoryName || 'Non définie' }}
-              </span>
-            </p>
+          <p class="dish-description">
+            {{ dish.description }}
+          </p>
 
-            <p class="dish-info price">
-              <mat-icon>payments</mat-icon>
-              <span>{{ dish.price | number:'1.2-2' }} $</span>
-            </p>
+          <p class="dish-info">
+            <mat-icon>category</mat-icon>
+            <span>
+              <strong>Catégorie :</strong>
+              {{ dish.categoryName || 'Non définie' }}
+            </span>
+          </p>
 
-            <div class="dish-actions">
-              <button type="button" (click)="startEdit(dish)">
-                <mat-icon>edit</mat-icon>
-                Modifier
-              </button>
+          <p class="dish-info price">
+            <mat-icon>payments</mat-icon>
+            <span>{{ dish.price | number:'1.2-2' }} $</span>
+          </p>
 
-              <button type="button" class="danger" (click)="deleteDish(dish.id)">
-                <mat-icon>delete</mat-icon>
-                Supprimer
-              </button>
-            </div>
-          </article>
-        }
-      </div>
-    }
-  </section>
+          <div class="dish-actions">
+            <button type="button" (click)="startEdit(dish)">
+              <mat-icon>edit</mat-icon>
+              Modifier
+            </button>
+
+            <button type="button" class="danger" (click)="deleteDish(dish.id)">
+              <mat-icon>delete</mat-icon>
+              Supprimer
+            </button>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</section>
 </section>

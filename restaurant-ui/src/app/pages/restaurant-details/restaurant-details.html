@@ -31,6 +31,13 @@
   <div class="dish-grid">
     @for (dish of dishes; track dish.id) {
       <article class="dish-card">
+        @if (dish.imageUrl) {
+  <img
+    [src]="dish.imageUrl"
+    [alt]="dish.name"
+    class="dish-image"
+  >
+}
         <div>
           <div class="dish-title">
             <mat-icon>lunch_dining</mat-icon>
