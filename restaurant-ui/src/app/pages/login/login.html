@@ -13,7 +13,11 @@
         <p class="success">{{ successMessage }}</p>
       }
 
-      <form class="login-form" (ngSubmit)="login()">
+      <form
+        class="login-form"
+        (ngSubmit)="login()"
+        autocomplete="off"
+      >
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
           <input
@@ -22,6 +26,9 @@
             name="email"
             [(ngModel)]="email"
             required
+            autocomplete="off"
+            autocapitalize="none"
+            spellcheck="false"
           >
         </mat-form-field>
 
@@ -33,6 +40,7 @@
             name="password"
             [(ngModel)]="password"
             required
+            autocomplete="new-password"
           >
         </mat-form-field>
 

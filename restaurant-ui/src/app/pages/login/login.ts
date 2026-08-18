@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
@@ -12,19 +12,19 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-login',
   imports: [
-  FormsModule,
-  RouterLink,
-  MatCardModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatButtonModule
-],
+    FormsModule,
+    RouterLink,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule
+  ],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
-export class Login {
-  email = 'client@test.com';
-  password = 'Password123!';
+export class Login implements OnInit {
+  email = '';
+  password = '';
 
   errorMessage = '';
   successMessage = '';
@@ -34,6 +34,15 @@ export class Login {
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
+
+  ngOnInit(): void {
+    this.email = '';
+    this.password = '';
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    this.cdr.detectChanges();
+  }
 
   async login(): Promise<void> {
     this.errorMessage = '';
@@ -47,12 +56,12 @@ export class Login {
 
       setTimeout(() => {
         if (result.user.role === 'Restaurateur') {
-  this.router.navigate(['/restaurateur']);
-} else if (result.user.role === 'Livreur') {
-  this.router.navigate(['/livreur']);
-} else {
-  this.router.navigate(['/restaurants']);
-}
+          this.router.navigate(['/restaurateur']);
+        } else if (result.user.role === 'Livreur') {
+          this.router.navigate(['/livreur']);
+        } else {
+          this.router.navigate(['/restaurants']);
+        }
       }, 500);
     } catch (error) {
       this.errorMessage = 'Email ou mot de passe invalide.';

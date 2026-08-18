@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestaurantApi.Data;
-using RestaurantApi.Models;
 using RestaurantApi.DTOs;
+using RestaurantApi.Models;
 using Microsoft.AspNetCore.Authorization;
 
 namespace RestaurantApi.Controllers;
@@ -60,6 +60,7 @@ public class RestaurantsController : ControllerBase
                     d.Price,
                     d.ImageUrl,
                     d.IsAvailable,
+                    d.RestaurantId,
                     d.CategoryId,
                     CategoryName = d.Category != null ? d.Category.Name : null
                 })
@@ -68,7 +69,7 @@ public class RestaurantsController : ControllerBase
 
         if (restaurant == null)
         {
-            return NotFound();
+            return NotFound(new { message = "Restaurant introuvable." });
         }
 
         return Ok(restaurant);

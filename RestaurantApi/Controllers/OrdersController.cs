@@ -254,6 +254,10 @@ public class OrdersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateOrder(OrderCreateDto orderDto)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
         var client = await _context.Users.FindAsync(orderDto.ClientId);
 
         if (client == null || client.Role != "Client")
